@@ -13,7 +13,40 @@ use core::ops::Deref;
 #[doc = r" Number available in the NVIC for configuring priority"]
 pub const NVIC_PRIO_BITS: u8 = 3;
 #[cfg(feature = "rt")]
-extern "C" {}
+extern "C" {
+    fn GPIO();
+    fn I2C();
+    fn RFC_PE0();
+    fn AON_RTC();
+    fn UART0();
+    fn UART1();
+    fn SSI0();
+    fn SSI1();
+    fn RFC_PE1();
+    fn RFC();
+    fn RFC_CA();
+    fn I2S();
+    fn WDT();
+    fn GPT0A();
+    fn GPT0B();
+    fn GPT1A();
+    fn GPT1B();
+    fn GPT2A();
+    fn GPT2B();
+    fn GPT3A();
+    fn GPT3B();
+    fn CRYPTO();
+    fn UDMA();
+    fn UDMA_ERR();
+    fn FLASH();
+    fn SWE0();
+    fn AUX_CE();
+    fn AON_EVENT();
+    fn DYN_EVENT();
+    fn AUX_COMPA();
+    fn AUX_MISC();
+    fn TRNG();
+}
 #[doc(hidden)]
 pub union Vector {
     _handler: unsafe extern "C" fn(),
@@ -23,13 +56,153 @@ pub union Vector {
 #[doc(hidden)]
 #[link_section = ".vector_table.interrupts"]
 #[no_mangle]
-pub static __INTERRUPTS: [Vector; 0] = [];
+pub static __INTERRUPTS: [Vector; 34] = [
+    Vector { _handler: GPIO },
+    Vector { _handler: I2C },
+    Vector { _handler: RFC_PE0 },
+    Vector { _reserved: 0 },
+    Vector { _handler: AON_RTC },
+    Vector { _handler: UART0 },
+    Vector { _handler: UART1 },
+    Vector { _handler: SSI0 },
+    Vector { _handler: SSI1 },
+    Vector { _handler: RFC_PE1 },
+    Vector { _handler: RFC },
+    Vector { _handler: RFC_CA },
+    Vector { _handler: I2S },
+    Vector { _reserved: 0 },
+    Vector { _handler: WDT },
+    Vector { _handler: GPT0A },
+    Vector { _handler: GPT0B },
+    Vector { _handler: GPT1A },
+    Vector { _handler: GPT1B },
+    Vector { _handler: GPT2A },
+    Vector { _handler: GPT2B },
+    Vector { _handler: GPT3A },
+    Vector { _handler: GPT3B },
+    Vector { _handler: CRYPTO },
+    Vector { _handler: UDMA },
+    Vector { _handler: UDMA_ERR },
+    Vector { _handler: FLASH },
+    Vector { _handler: SWE0 },
+    Vector { _handler: AUX_CE },
+    Vector {
+        _handler: AON_EVENT,
+    },
+    Vector {
+        _handler: DYN_EVENT,
+    },
+    Vector {
+        _handler: AUX_COMPA,
+    },
+    Vector { _handler: AUX_MISC },
+    Vector { _handler: TRNG },
+];
 #[doc = r" Enumeration of all the interrupts"]
-pub enum Interrupt {}
+#[derive(Copy, Clone, Debug)]
+pub enum Interrupt {
+    #[doc = "0 - GPIO edge detect"]
+    GPIO,
+    #[doc = "1 - I2C"]
+    I2C,
+    #[doc = "2 - RF Core and packet engine 1"]
+    RFC_PE0,
+    #[doc = "4 - AON RTC"]
+    AON_RTC,
+    #[doc = "5 - UART0"]
+    UART0,
+    #[doc = "6 - UART1"]
+    UART1,
+    #[doc = "7 - SSI0"]
+    SSI0,
+    #[doc = "8 - SSI1"]
+    SSI1,
+    #[doc = "9 - RF Core and packet engine 2"]
+    RFC_PE1,
+    #[doc = "10 - RF Core hardware"]
+    RFC,
+    #[doc = "11 - RF command acknowledge"]
+    RFC_CA,
+    #[doc = "12 - I2S"]
+    I2S,
+    #[doc = "14 - Watchdog timer"]
+    WDT,
+    #[doc = "15 - GPTimer 0A"]
+    GPT0A,
+    #[doc = "16 - GPTimer 0B"]
+    GPT0B,
+    #[doc = "17 - GPTimer 1A"]
+    GPT1A,
+    #[doc = "18 - GPTimer 1B"]
+    GPT1B,
+    #[doc = "19 - GPTimer 2A"]
+    GPT2A,
+    #[doc = "20 - GPTimer 2B"]
+    GPT2B,
+    #[doc = "21 - GPTimer 3A"]
+    GPT3A,
+    #[doc = "22 - GPTimer 3B"]
+    GPT3B,
+    #[doc = "23 - Crypto"]
+    CRYPTO,
+    #[doc = "24 - \u{3bc}DMA software defined"]
+    UDMA,
+    #[doc = "25 - \u{3bc}DMA error"]
+    UDMA_ERR,
+    #[doc = "26 - Flash"]
+    FLASH,
+    #[doc = "27 - Software event 0"]
+    SWE0,
+    #[doc = "28 - AUX combined event"]
+    AUX_CE,
+    #[doc = "29 - AON programmable event"]
+    AON_EVENT,
+    #[doc = "30 - Dynamic programmable event"]
+    DYN_EVENT,
+    #[doc = "31 - AUX comparator A"]
+    AUX_COMPA,
+    #[doc = "32 - AUX ADC new sample available or ADC DMA done, ADC underflow and overflow"]
+    AUX_MISC,
+    #[doc = "33 - True random number generator"]
+    TRNG,
+}
 unsafe impl ::bare_metal::Nr for Interrupt {
     #[inline]
     fn nr(&self) -> u8 {
-        match *self {}
+        match *self {
+            Interrupt::GPIO => 0,
+            Interrupt::I2C => 1,
+            Interrupt::RFC_PE0 => 2,
+            Interrupt::AON_RTC => 4,
+            Interrupt::UART0 => 5,
+            Interrupt::UART1 => 6,
+            Interrupt::SSI0 => 7,
+            Interrupt::SSI1 => 8,
+            Interrupt::RFC_PE1 => 9,
+            Interrupt::RFC => 10,
+            Interrupt::RFC_CA => 11,
+            Interrupt::I2S => 12,
+            Interrupt::WDT => 14,
+            Interrupt::GPT0A => 15,
+            Interrupt::GPT0B => 16,
+            Interrupt::GPT1A => 17,
+            Interrupt::GPT1B => 18,
+            Interrupt::GPT2A => 19,
+            Interrupt::GPT2B => 20,
+            Interrupt::GPT3A => 21,
+            Interrupt::GPT3B => 22,
+            Interrupt::CRYPTO => 23,
+            Interrupt::UDMA => 24,
+            Interrupt::UDMA_ERR => 25,
+            Interrupt::FLASH => 26,
+            Interrupt::SWE0 => 27,
+            Interrupt::AUX_CE => 28,
+            Interrupt::AON_EVENT => 29,
+            Interrupt::DYN_EVENT => 30,
+            Interrupt::AUX_COMPA => 31,
+            Interrupt::AUX_MISC => 32,
+            Interrupt::TRNG => 33,
+        }
     }
 }
 #[cfg(feature = "rt")]
